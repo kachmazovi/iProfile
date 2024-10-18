@@ -1,9 +1,11 @@
 .wrapper {
   width: 400px;
-  height: 500px;
   background-color: white;
   border-radius: 15px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .header {
     text-align: center;
@@ -13,12 +15,34 @@
     height: 60px;
     overflow: hidden;
 
-    p {
-      transition: all 0.3s linear;
-    }
-
     .up {
       transform: translate(0, -63px);
     }
+  }
+
+  form {
+    width: 70%;
+    height: 250px;
+    overflow: auto;
+    scrollbar-width: none;
+    margin: 20px 0;
+
+    input {
+      width: 100%;
+      height: 30px;
+      margin-bottom: 20px;
+      border: 1px solid gray;
+      border-bottom-width: 2px;
+      border-radius: 5px;
+    }
+  }
+
+  .hide-inputs {
+    height: 40px;
+    overflow: hidden;
+  }
+
+  .rotate-180 {
+    transform: rotateY(180deg);
   }
 }

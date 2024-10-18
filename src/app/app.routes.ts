@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { UserAuthComponent } from './user-auth/user-auth.component';
+import { isLoggedGuard } from './user-profile/is-logged.guard';
 
 export const routes: Routes = [
   {
@@ -11,11 +10,18 @@ export const routes: Routes = [
   {
     title: 'auth',
     path: 'auth',
-    component: UserAuthComponent,
+    loadComponent: () =>
+      import('./user-auth/user-auth.component').then(
+        (c) => c.UserAuthComponent
+      ),
   },
   {
     title: 'profile',
     path: 'edit-profile',
-    component: UserProfileComponent,
+    loadComponent: () =>
+      import('./user-profile/user-profile.component').then(
+        (c) => c.UserProfileComponent
+      ),
+    canActivate: [isLoggedGuard],
   },
 ];
