@@ -6,4 +6,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 })
 export class FirebaseRestService {
   constructor(private firestore: AngularFirestore) {}
+
+  public getProfiles() {
+    return this.firestore.collection('profiles').valueChanges();
+  }
 }

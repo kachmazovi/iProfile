@@ -1,0 +1,9 @@
+<div class="wrapper">
+  <div class="header">
+    <p [ngClass]="{ up: !isLogin() }">Login</p>
+    <p [ngClass]="{ up: !isLogin() }">Register</p>
+  </div>
+
+  <button (click)="isLogin.set(true)">Login</button>
+  <button (click)="isLogin.set(false)">Register</button>
+</div>
