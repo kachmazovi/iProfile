@@ -41,7 +41,7 @@
 
     <input
       formControlName="phoneNumber"
-      type="text"
+      type="number"
       placeholder="Phone Number:"
     />
 
@@ -56,5 +56,6 @@
         ? 'fa-solid fa-right-to-bracket'
         : 'fa-solid fa-user-plus rotate-180'
     "
+    (click)="userForm.valid && (isLogin() ? login() : register())"
   ></i>
 </div>

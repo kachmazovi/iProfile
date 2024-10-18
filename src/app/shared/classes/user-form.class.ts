@@ -1,4 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UserInfoService } from '../services/user-info.service';
 
 export abstract class UserForm {
   public userForm = new FormGroup({
@@ -20,7 +21,17 @@ export abstract class UserForm {
     },
   ];
 
-  constructor() {}
+  constructor(protected userInfo: UserInfoService) {}
+
+  public login(): void {
+    this.userInfo.login(this.email.value);
+  }
+
+  public logout(): void {}
+
+  public register(): void {}
+
+  public update(): void {}
 
   public get email(): FormControl {
     return this.userForm.get('email') as FormControl;

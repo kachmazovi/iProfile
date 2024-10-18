@@ -3,6 +3,7 @@ import { Component, effect, signal } from '@angular/core';
 import { UserForm } from '../shared/classes/user-form.class';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { MsgViewComponent } from '../shared/components/msg-view/msg-view.component';
+import { UserInfoService } from '../shared/services/user-info.service';
 
 @Component({
   selector: 'app-user-auth',
@@ -14,8 +15,8 @@ import { MsgViewComponent } from '../shared/components/msg-view/msg-view.compone
 export class UserAuthComponent extends UserForm {
   public isLogin = signal(true);
 
-  constructor() {
-    super();
+  constructor(protected override userInfo: UserInfoService) {
+    super(userInfo);
 
     effect(() => {
       if (this.isLogin()) {
