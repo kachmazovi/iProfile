@@ -4,9 +4,19 @@
     <p class="animate" [ngClass]="{ up: !isLogin() }">Register</p>
   </div>
 
-  <div class="buttons">
-    <button (click)="isLogin.set(true)">Login</button>
-    <button (click)="isLogin.set(false)">Register</button>
+  <div class="buttons" [ngClass]="{ 'is-register': !isLogin() }">
+    <button
+      [ngClass]="{ pointer: !isLogin(), white: isLogin() }"
+      (click)="isLogin.set(true)"
+    >
+      Login
+    </button>
+    <button
+      [ngClass]="{ pointer: isLogin(), white: !isLogin() }"
+      (click)="isLogin.set(false)"
+    >
+      Register
+    </button>
   </div>
 
   <form class="animate" [ngClass]="{ 'hide-inputs': isLogin() }">
@@ -24,7 +34,7 @@
   </form>
 
   <i
-    class="animate fa-xl"
+    class="animate fa-xl pointer"
     [ngClass]="
       isLogin()
         ? 'fa-solid fa-right-to-bracket'
