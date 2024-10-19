@@ -1,8 +1,16 @@
 <div class="container">
   <div class="profile-image">
-    <img src="../../assets/img.jpeg" alt="" />
-    @if(isEditing()) {
-    <input [formControl]="profilePicture" type="text" />
+    <img [src]="imgUrl() || defaultImage" alt="" />
+    <input id="profile-picture" type="file" (change)="upload($event)" hidden />
+    <label for="profile-picture">
+      Change Profile Picture <i class="fa-solid fa-upload"></i>
+    </label>
+    @if(imgUrl()) {
+    <label (click)="delete()">
+      Delete Profile Picture
+      <i class="fa-solid fa-trash-can"></i>
+    </label>
+
     }
   </div>
   <form [formGroup]="userForm" [ngClass]="{ isEditing: isEditing() }">

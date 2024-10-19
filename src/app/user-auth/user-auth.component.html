@@ -45,7 +45,15 @@
       placeholder="Phone Number:"
     />
 
-    <input formControlName="profilePicture" type="text" />
+    <input id="profile-picture" type="file" (change)="upload($event)" hidden />
+    <label for="profile-picture">
+      Upload Profile Picture <i class="fa-solid fa-upload"></i>
+    </label>
+    } @if(imgUrl()) {
+    <div class="profile-image">
+      <img [src]="imgUrl()" alt="" />
+      <i (click)="delete()" class="fa-solid fa-trash-can"></i>
+    </div>
     }
   </form>
 
@@ -56,6 +64,6 @@
         ? 'fa-solid fa-right-to-bracket'
         : 'fa-solid fa-user-plus rotate-180'
     "
-    (click)="userForm.valid && (isLogin() ? login() : register())"
+    (click)="isLogin() ? login() : register()"
   ></i>
 </div>

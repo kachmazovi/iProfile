@@ -4,6 +4,7 @@ import { UserInfoService } from '../shared/services/user-info.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MsgViewComponent } from '../shared/components/msg-view/msg-view.component';
 import { NgClass } from '@angular/common';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -14,6 +15,7 @@ import { NgClass } from '@angular/common';
 })
 export class UserProfileComponent extends UserForm implements OnInit {
   public isEditing = signal(false);
+  public defaultImage = '../../assets/images/default.png';
 
   constructor(protected override userInfo: UserInfoService) {
     super(userInfo);
@@ -25,11 +27,11 @@ export class UserProfileComponent extends UserForm implements OnInit {
         this.userForm.disable();
       }
     });
-    console.log('edited: ', this.userInfo.currentUser());
   }
 
   ngOnInit(): void {
     this.initUserProfile();
+    this.initProfileImg();
   }
 
   public cancelEditing(): void {
@@ -47,5 +49,17 @@ export class UserProfileComponent extends UserForm implements OnInit {
     this.phoneNumber.setValue(phoneNumber);
     this.profilePicture.setValue(profilePicture);
     this.userForm.disable();
+  }
+
+  private initProfileImg() {
+    if (this.profilePicture.value)
+      this.userInfo
+        .getProfileImage(this.profilePicture.value)
+        .pipe(
+          tap((url) => {
+            this.imgUrl.set(url);
+          })
+        )
+        .subscribe();
   }
 }

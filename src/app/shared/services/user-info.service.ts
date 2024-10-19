@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { FirebaseRestService, IUserInfo } from './firebase.rest.service';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +29,25 @@ export class UserInfoService {
         })
       )
       .subscribe();
+  }
+
+  public register(userData: IUserInfo) {
+    return this.firebaseRestServ.register(userData);
+  }
+
+  public getProfileImage(imgId: string): Observable<string> {
+    return this.firebaseRestServ.getProfileImage(imgId);
+  }
+
+  public uploadImg(file: File, imgId: string) {
+    return this.firebaseRestServ.uploadProfileImage(file, imgId).pipe(
+      switchMap(() => {
+        return this.getProfileImage(imgId);
+      })
+    );
+  }
+
+  public removeImg(imgId: string): Observable<any> {
+    return this.firebaseRestServ.removeProfileImage(imgId);
   }
 }

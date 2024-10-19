@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, HostListener, signal } from '@angular/core';
 import { UserForm } from '../shared/classes/user-form.class';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { MsgViewComponent } from '../shared/components/msg-view/msg-view.component';
@@ -14,6 +14,11 @@ import { UserInfoService } from '../shared/services/user-info.service';
 })
 export class UserAuthComponent extends UserForm {
   public isLogin = signal(true);
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownHandler() {
+    this.isLogin() ? this.login() : this.register();
+  }
 
   constructor(protected override userInfo: UserInfoService) {
     super(userInfo);
