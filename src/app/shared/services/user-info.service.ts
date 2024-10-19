@@ -1,12 +1,13 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { FirebaseRestService, IUserInfo } from './firebase.rest.service';
 import { Router } from '@angular/router';
-import { Observable, switchMap, tap } from 'rxjs';
+import { finalize, Observable, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserInfoService {
+  public spinner = signal(false);
   public isLogged = signal(false);
   public currentUser = signal<IUserInfo>({} as IUserInfo);
 
@@ -20,6 +21,7 @@ export class UserInfoService {
   }
 
   public login(email: string) {
+    this.spinner.set(true);
     this.firebaseRestServ
       .getProfiles()
       .pipe(
@@ -30,7 +32,8 @@ export class UserInfoService {
             this.currentUser.set(currentUser);
             this.router.navigate(['edit-profile']);
           }
-        })
+        }),
+        finalize(() => this.spinner.set(false))
       )
       .subscribe();
   }

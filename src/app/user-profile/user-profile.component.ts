@@ -4,7 +4,7 @@ import { UserInfoService } from '../shared/services/user-info.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MsgViewComponent } from '../shared/components/msg-view/msg-view.component';
 import { NgClass } from '@angular/common';
-import { tap } from 'rxjs';
+import { finalize, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -41,8 +41,15 @@ export class UserProfileComponent extends UserForm implements OnInit {
   }
 
   public updateUser(): void {
-    this.isEditing.set(false);
-    this.update().subscribe();
+    this.userInfo.spinner.set(true);
+    this.update()
+      .pipe(
+        finalize(() => {
+          this.userInfo.spinner.set(false);
+          this.isEditing.set(false);
+        })
+      )
+      .subscribe();
   }
 
   private initUserProfile(): void {
@@ -58,14 +65,19 @@ export class UserProfileComponent extends UserForm implements OnInit {
   }
 
   private initProfileImg() {
-    if (this.profilePicture.value)
+    if (this.profilePicture.value) {
+      this.userInfo.spinner.set(true);
+
       this.userInfo
         .getProfileImage(this.profilePicture.value)
         .pipe(
+          takeUntil(this.$destroy),
           tap((url) => {
             this.imgUrl.set(url);
-          })
+          }),
+          finalize(() => this.userInfo.spinner.set(false))
         )
         .subscribe();
+    }
   }
 }

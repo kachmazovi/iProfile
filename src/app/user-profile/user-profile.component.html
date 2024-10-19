@@ -14,8 +14,8 @@
     }
   </div>
   <form [formGroup]="userForm" [ngClass]="{ isEditing: isEditing() }">
-    <label
-      >Email:
+    <label>
+      * Email:
       <input formControlName="email" type="email" placeholder="Email:" />
       @for (item of errorMessages; track $index) { @if(email.hasError(item.type)
       && email.touched) {
@@ -24,7 +24,7 @@
     </label>
 
     <label>
-      First Name:
+      * First Name:
       <input
         formControlName="firstName"
         type="text"
@@ -36,7 +36,7 @@
     </label>
 
     <label>
-      Last Name:
+      * Last Name:
       <input formControlName="lastName" type="text" placeholder="Last Name:" />
       @if(lastName.hasError('required') && lastName.touched) {
       <app-msg-view color="yellow" [msg]="errorMessages[0].msg" />

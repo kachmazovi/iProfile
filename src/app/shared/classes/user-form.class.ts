@@ -1,11 +1,12 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { signal } from '@angular/core';
-import { Observable, switchMap, tap } from 'rxjs';
+import { finalize, Observable, switchMap, tap } from 'rxjs';
 import { v4 } from 'uuid';
 import { UserInfoService } from '../services/user-info.service';
 import { IUserInfo } from '../services/firebase.rest.service';
+import { DestroyableComponent } from '../components/destroyable/destroyable.component';
 
-export abstract class UserForm {
+export abstract class UserForm extends DestroyableComponent {
   public userForm = new FormGroup({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
     firstName: new FormControl<string>('', [Validators.required]),
@@ -27,7 +28,9 @@ export abstract class UserForm {
 
   public imgUrl = signal<string | null>(null);
 
-  constructor(protected userInfo: UserInfoService) {}
+  constructor(protected userInfo: UserInfoService) {
+    super();
+  }
 
   public login(): void {
     this.userInfo.login(this.email.value);
@@ -39,8 +42,10 @@ export abstract class UserForm {
   }
 
   public register(): void {
+    this.userInfo.spinner.set(true);
     this.userInfo
       .register(this.userForm.getRawValue() as IUserInfo)
+      .pipe(finalize(() => this.userInfo.spinner.set(false)))
       .subscribe();
   }
 
@@ -49,21 +54,27 @@ export abstract class UserForm {
   }
 
   public upload(event: any): void {
+    this.userInfo.spinner.set(true);
     const file = event.target.files[0];
     this.profilePicture.setValue(this.profilePicture.value || v4());
     this.userInfo
       .uploadImg(file, this.profilePicture.value)
       .pipe(
         tap((url) => this.imgUrl.set(url)),
-        switchMap(() => this.update())
+        switchMap(() => this.update()),
+        finalize(() => this.userInfo.spinner.set(false))
       )
       .subscribe();
   }
 
   public delete(): void {
+    this.userInfo.spinner.set(true);
     this.userInfo
       .removeImg(this.profilePicture.value)
-      .pipe(tap(() => this.imgUrl.set(null)))
+      .pipe(
+        tap(() => this.imgUrl.set(null)),
+        finalize(() => this.userInfo.spinner.set(false))
+      )
       .subscribe();
   }
 

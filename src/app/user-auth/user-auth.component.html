@@ -24,17 +24,21 @@
     class="animate"
     [ngClass]="{ 'hide-inputs': isLogin() }"
   >
-    <input formControlName="email" type="email" placeholder="Email:" />
+    <input formControlName="email" type="email" placeholder="* Email:" />
     @for (item of errorMessages; track $index) { @if(email.hasError(item.type)
     && email.touched) {
     <app-msg-view color="red" [msg]="item.msg" />
     } } @if(!isLogin()) {
-    <input formControlName="firstName" type="text" placeholder="First Name:" />
+    <input
+      formControlName="firstName"
+      type="text"
+      placeholder="* First Name:"
+    />
     @if(firstName.hasError('required') && firstName.touched) {
     <app-msg-view color="red" [msg]="errorMessages[0].msg" />
     }
 
-    <input formControlName="lastName" type="text" placeholder="Last Name:" />
+    <input formControlName="lastName" type="text" placeholder="* Last Name:" />
     @if(lastName.hasError('required') && lastName.touched) {
     <app-msg-view color="red" [msg]="errorMessages[0].msg" />
     }
@@ -58,12 +62,12 @@
   </form>
 
   <i
-    class="animate fa-xl pointer"
-    [ngClass]="
-      isLogin()
-        ? 'fa-solid fa-right-to-bracket'
-        : 'fa-solid fa-user-plus rotate-180'
-    "
-    (click)="isLogin() ? login() : register()"
+    class="animate fa-xl pointer fa-solid"
+    [ngClass]="{
+      'fa-arrow-right-to-bracket': isLogin(),
+      'fa-user-plus rotate-180': !isLogin(),
+      'not-allowed': userForm.invalid,
+    }"
+    (click)="userForm.valid && (isLogin() ? login() : register())"
   ></i>
 </div>
