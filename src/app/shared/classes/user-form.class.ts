@@ -42,10 +42,8 @@ export abstract class UserForm extends DestroyableComponent {
   }
 
   public register(): void {
-    this.userInfo.spinner.set(true);
     this.userInfo
       .register(this.userForm.getRawValue() as IUserInfo)
-      .pipe(finalize(() => this.userInfo.spinner.set(false)))
       .subscribe();
   }
 

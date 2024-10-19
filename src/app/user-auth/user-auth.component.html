@@ -28,7 +28,10 @@
     @for (item of errorMessages; track $index) { @if(email.hasError(item.type)
     && email.touched) {
     <app-msg-view color="red" [msg]="item.msg" />
-    } } @if(!isLogin()) {
+    } } @if (userInfo.wrongEmail()) {
+    <app-msg-view color="red" msg="Wrong Email" />
+
+    } @if(!isLogin()) {
     <input
       formControlName="firstName"
       type="text"
@@ -56,7 +59,7 @@
     } @if(imgUrl()) {
     <div class="profile-image">
       <img [src]="imgUrl()" alt="" />
-      <i (click)="delete()" class="fa-solid fa-trash-can"></i>
+      <i (click)="delete()" class="fa-solid fa-trash-can pointer"></i>
     </div>
     }
   </form>
@@ -66,7 +69,7 @@
     [ngClass]="{
       'fa-arrow-right-to-bracket': isLogin(),
       'fa-user-plus rotate-180': !isLogin(),
-      'not-allowed': userForm.invalid,
+      'not-allowed': !userForm.valid,
     }"
     (click)="userForm.valid && (isLogin() ? login() : register())"
   ></i>

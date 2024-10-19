@@ -8,7 +8,9 @@ import { finalize, Observable, switchMap, tap } from 'rxjs';
 })
 export class UserInfoService {
   public spinner = signal(false);
+  public isLoginPage = signal(true);
   public isLogged = signal(false);
+  public wrongEmail = signal(false);
   public currentUser = signal<IUserInfo>({} as IUserInfo);
 
   constructor(
@@ -31,15 +33,23 @@ export class UserInfoService {
             this.isLogged.set(true);
             this.currentUser.set(currentUser);
             this.router.navigate(['edit-profile']);
+          } else {
+            this.wrongEmail.set(true);
           }
-        }),
-        finalize(() => this.spinner.set(false))
+          this.spinner.set(false);
+        })
       )
       .subscribe();
   }
 
   public register(userData: IUserInfo) {
-    return this.firebaseRestServ.register(userData);
+    this.spinner.set(true);
+    return this.firebaseRestServ.register(userData).pipe(
+      finalize(() => {
+        this.spinner.set(false);
+        this.isLoginPage.set(true);
+      })
+    );
   }
 
   public update(userData: IUserInfo) {
