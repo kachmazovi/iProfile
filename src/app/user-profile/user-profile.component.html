@@ -1,1 +1,55 @@
-<p>user-profile works!</p>
+<div class="container">
+  <div class="profile-image">
+    <img src="../../assets/img.jpeg" alt="" />
+    @if(isEditing()) {
+    <input [formControl]="profilePicture" type="text" />
+    }
+  </div>
+  <form [formGroup]="userForm" [ngClass]="{ isEditing: isEditing() }">
+    <label
+      >Email:
+      <input formControlName="email" type="email" placeholder="Email:" />
+      @for (item of errorMessages; track $index) { @if(email.hasError(item.type)
+      && email.touched) {
+      <app-msg-view color="yellow" [msg]="item.msg" />
+      } }
+    </label>
+
+    <label>
+      First Name:
+      <input
+        formControlName="firstName"
+        type="text"
+        placeholder="First Name:"
+      />
+      @if(firstName.hasError('required') && firstName.touched) {
+      <app-msg-view color="yellow" [msg]="errorMessages[0].msg" />
+      }
+    </label>
+
+    <label>
+      Last Name:
+      <input formControlName="lastName" type="text" placeholder="Last Name:" />
+      @if(lastName.hasError('required') && lastName.touched) {
+      <app-msg-view color="yellow" [msg]="errorMessages[0].msg" />
+      }
+    </label>
+
+    <label>
+      Phone Number:
+      <input
+        formControlName="phoneNumber"
+        type="number"
+        placeholder="Phone Number:"
+      />
+    </label>
+  </form>
+  <div class="buttons">
+    @if(!isEditing()) {
+    <button (click)="isEditing.set(true)">Edit Profile</button>
+    } @if(isEditing()) {
+    <button (click)="cancelEditing()">Cancel</button>
+    <button>Submit</button>
+    }
+  </div>
+</div>

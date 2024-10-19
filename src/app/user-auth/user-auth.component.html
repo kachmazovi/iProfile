@@ -27,16 +27,16 @@
     <input formControlName="email" type="email" placeholder="Email:" />
     @for (item of errorMessages; track $index) { @if(email.hasError(item.type)
     && email.touched) {
-    <app-msg-view type="error" [msg]="item.msg" />
+    <app-msg-view color="red" [msg]="item.msg" />
     } } @if(!isLogin()) {
     <input formControlName="firstName" type="text" placeholder="First Name:" />
     @if(firstName.hasError('required') && firstName.touched) {
-    <app-msg-view type="error" [msg]="errorMessages[0].msg" />
+    <app-msg-view color="red" [msg]="errorMessages[0].msg" />
     }
 
     <input formControlName="lastName" type="text" placeholder="Last Name:" />
     @if(lastName.hasError('required') && lastName.touched) {
-    <app-msg-view type="error" [msg]="errorMessages[0].msg" />
+    <app-msg-view color="red" [msg]="errorMessages[0].msg" />
     }
 
     <input

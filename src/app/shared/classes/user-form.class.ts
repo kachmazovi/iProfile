@@ -4,8 +4,8 @@ import { UserInfoService } from '../services/user-info.service';
 export abstract class UserForm {
   public userForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl(''),
     profilePicture: new FormControl(''),
   });

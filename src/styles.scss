@@ -4,9 +4,13 @@
 body {
   height: 100vh;
   background: linear-gradient(90deg, #003366, #004080, #0059b3, #0073e6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}
+
+input {
+  height: 30px;
+  border: 1px solid gray;
+  border-bottom-width: 2px;
+  border-radius: 5px;
 }
 
 input:focus {

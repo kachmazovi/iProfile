@@ -1,11 +1,11 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-msg-view',
   standalone: true,
-  imports: [NgClass],
-  template: ` <p [ngClass]="type">{{ msg }}</p> `,
+  imports: [NgStyle],
+  template: ` <p [ngStyle]="{ color: color }">{{ msg }}</p> `,
   styles: `
     p {
       font-size: 12px;
@@ -15,12 +15,12 @@ import { Component, Input } from '@angular/core';
       } 
 
       &.error {
-        color: red;
+        color: yellow;
       }
     }
   `,
 })
 export class MsgViewComponent {
-  @Input() type!: 'success' | 'error';
   @Input() msg!: string;
+  @Input() color!: string;
 }
