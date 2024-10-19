@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { signal } from '@angular/core';
-import { tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { v4 } from 'uuid';
 import { UserInfoService } from '../services/user-info.service';
 import { IUserInfo } from '../services/firebase.rest.service';
@@ -33,7 +33,10 @@ export abstract class UserForm {
     this.userInfo.login(this.email.value);
   }
 
-  public logout(): void {}
+  public logout(): void {
+    this.userInfo.isLogged.set(false);
+    this.userInfo.currentUser.set({} as IUserInfo);
+  }
 
   public register(): void {
     this.userInfo
@@ -41,14 +44,19 @@ export abstract class UserForm {
       .subscribe();
   }
 
-  public update(): void {}
+  public update(): Observable<any> {
+    return this.userInfo.update(this.userForm.getRawValue() as IUserInfo);
+  }
 
   public upload(event: any): void {
     const file = event.target.files[0];
     this.profilePicture.setValue(this.profilePicture.value || v4());
     this.userInfo
       .uploadImg(file, this.profilePicture.value)
-      .pipe(tap((url) => this.imgUrl.set(url)))
+      .pipe(
+        tap((url) => this.imgUrl.set(url)),
+        switchMap(() => this.update())
+      )
       .subscribe();
   }
 

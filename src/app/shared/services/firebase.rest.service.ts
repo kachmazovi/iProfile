@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { from, Observable } from 'rxjs';
 import { db } from '../../../assets/configs/firebase.config';
 import {
@@ -34,6 +34,16 @@ export class FirebaseRestService {
 
   public register(userData: IUserInfo): Observable<any> {
     return from<any>(setDoc(doc(db, 'profiles', userData.email), userData));
+  }
+
+  public update(userData: IUserInfo): Observable<any> {
+    const currentUser = doc(db, 'profiles', userData.email);
+
+    return from(
+      updateDoc(currentUser, {
+        ...userData,
+      })
+    );
   }
 
   public getProfileImage(imageId: string): Observable<string> {

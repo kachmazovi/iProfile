@@ -23,6 +23,7 @@ export class UserProfileComponent extends UserForm implements OnInit {
     effect(() => {
       if (this.isEditing()) {
         this.userForm.enable();
+        this.email.disable();
       } else {
         this.userForm.disable();
       }
@@ -37,6 +38,11 @@ export class UserProfileComponent extends UserForm implements OnInit {
   public cancelEditing(): void {
     this.isEditing.set(false);
     this.initUserProfile();
+  }
+
+  public updateUser(): void {
+    this.isEditing.set(false);
+    this.update().subscribe();
   }
 
   private initUserProfile(): void {

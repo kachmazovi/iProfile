@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { FirebaseRestService, IUserInfo } from './firebase.rest.service';
 import { Router } from '@angular/router';
 import { Observable, switchMap, tap } from 'rxjs';
@@ -13,7 +13,11 @@ export class UserInfoService {
   constructor(
     private firebaseRestServ: FirebaseRestService,
     private router: Router
-  ) {}
+  ) {
+    effect(() => {
+      if (!this.isLogged()) this.router.navigate(['/auth']);
+    });
+  }
 
   public login(email: string) {
     this.firebaseRestServ
@@ -33,6 +37,10 @@ export class UserInfoService {
 
   public register(userData: IUserInfo) {
     return this.firebaseRestServ.register(userData);
+  }
+
+  public update(userData: IUserInfo) {
+    return this.firebaseRestServ.update(userData);
   }
 
   public getProfileImage(imgId: string): Observable<string> {
