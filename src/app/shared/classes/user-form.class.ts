@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { signal } from '@angular/core';
-import { finalize, Observable, switchMap, tap } from 'rxjs';
+import { finalize, Observable, of, switchMap, tap } from 'rxjs';
 import { v4 } from 'uuid';
 import { UserInfoService } from '../services/user-info.service';
 import { IUserInfo } from '../services/firebase.rest.service';
@@ -51,7 +51,7 @@ export abstract class UserForm extends DestroyableComponent {
     return this.userInfo.update(this.userForm.getRawValue() as IUserInfo);
   }
 
-  public upload(event: any): void {
+  public upload(event: any, update = false): void {
     this.userInfo.spinner.set(true);
     const file = event.target.files[0];
     this.profilePicture.setValue(this.profilePicture.value || v4());
@@ -59,7 +59,7 @@ export abstract class UserForm extends DestroyableComponent {
       .uploadImg(file, this.profilePicture.value)
       .pipe(
         tap((url) => this.imgUrl.set(url)),
-        switchMap(() => this.update()),
+        switchMap(() => (update ? this.update() : of(null))),
         finalize(() => this.userInfo.spinner.set(false))
       )
       .subscribe();
